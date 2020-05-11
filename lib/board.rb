@@ -25,7 +25,7 @@ class Board
   end
 
   def update(input, player)
-    self.position(input) = player.token
+    @cells[input.to_i - 1]= player.token
   end
   
   def full?
