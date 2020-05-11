@@ -1,3 +1,4 @@
+require 'pry'
 
 class Game
   attr_accessor :board, :player_1, :player_2
@@ -20,7 +21,7 @@ class Game
 
   def won?
     WIN_COMBINATIONS.detect do |combo|
-      @board.taken?(combo[0]) && @board.cells[combo[0]] == @board.cells[combo[1]] && @board.cells[combo[1]] == @board.cells[combo[2]]
+      @board.taken?(combo[0] + 1) && @board.cells[combo[0]] == @board.cells[combo[1]] && @board.cells[combo[1]] == @board.cells[combo[2]]
     end
   end
 
@@ -40,8 +41,8 @@ class Game
 
   def turn
     puts "Please enter a number (1-9):"
-    input = gets.strip
-    while !@board.valid_move?(input)
+    input = gets.chomp
+    while !@board.valid_move?(input) do 
       self.turn
     end
     self.current_player == player_1 ? player_2 : player_1
