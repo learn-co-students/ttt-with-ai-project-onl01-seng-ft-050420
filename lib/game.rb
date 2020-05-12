@@ -41,10 +41,20 @@ class Game
 
   def turn
     puts "Please enter a number (1-9):"
-    input = gets.chomp
-    while !@board.valid_move?(input) do 
+    input = self.current_player.move
+    if @board.valid_move?(input)
+      @board.update(input, self.current_player)
+      @board.display
+    else
       self.turn
     end
-    self.current_player == player_1 ? player_2 : player_1
-  end 
+    self.current_player
+  end
+
+  def play
+    while !self.over? do
+      self.turn
+    end
+    puts (self.winner ? "Congratulations #{self.winner}!" : "Cat's Game!")
+  end
 end
