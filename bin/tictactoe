@@ -16,6 +16,8 @@ when "2"
   else 
     game = Game.new(Players::Human.new("O"), Players::Human.new("X"))
   end
+when "0"
+  game = Game.new(Players::Computer.new("X"), Players::Computer.new("O"))
 end
 game.play
 
