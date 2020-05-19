@@ -57,7 +57,6 @@ class Game
     end
     
     @board.update(input, current_player)
-    puts
     @board.display
   end
   
@@ -72,13 +71,16 @@ class Game
       puts "Congratulations #{winner}!"
     end
   end
+  
 end
-
 
 player_1 = Players::Computer.new("X")
 player_2 = Players::Computer.new("O")
 
-game = Game.new(player_1, player_2)
+board = Board.new
+board.cells = [" "," "," "," "," "," "," "," "," "]
+
+game = Game.new(player_1, player_2, board)
 game.play
 
 

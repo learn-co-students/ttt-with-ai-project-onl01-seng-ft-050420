@@ -66,5 +66,5 @@ class Board
       return nil
     end
   end
-  
+
 end

@@ -1,9 +1,15 @@
 class Player
   
-  attr_reader :token
+  attr_reader :token, :opponent
   
   def initialize(token)
     @token = token
+    
+    if @token == "X"
+      @opponent = "O"
+    else 
+      @opponent = "X"
+    end
   end
   
 end
@@ -12,68 +18,85 @@ class Players
   class Human < Player
     
     def move(board)
-      puts "Player #{token}: Make a move:"
+      puts "Player #{@token}: Make a move:"
       input = gets
     end
+    
   end
   
   class Computer < Player
+    
     def move(board)
       
-      if (board.cells.count {|x| x == " "}) == 9
-        input = rand(1..9).to_s
-      else
-        input = (minimax(board, token) + 1).to_s
+      if board.cells.count {|x| x == " "} == 9
+        return "9"
       end
       
-      return input
+      new_board = nil
+      moves = []
+      scores = []
+      
+      i = 0
+      while i < 9
+        if board.cells[i] == " "
+          new_board = Board.new
+          new_board.cells = Marshal.load(Marshal.dump(board.cells))
+          new_board.cells[i] = @token
+          
+          moves << i
+          scores << minimax(new_board, @token)
+          
+        end  
+        
+        i += 1
+      end
+      
+      move = moves[scores.index(scores.max)]
+      return (move + 1).to_s
+      
     end
     
     def minimax(board, token)
+      
       if board.won?
-        if board.winner == token
+        if board.winner == @token
           return 1
-        else
+        elsif board.winner == @opponent
           return -1
         end
+      elsif board.full?
+        return 0
       end
-    
-      new_board = Board.new
       
-      i = 0
-      
-      while i < 9
-        new_board.cells[i] = board.cells[i]
-        i += 1
-      end
-
       if token == "X"
         opponent = "O"
-      elsif token == "O"
+      else 
         opponent = "X"
       end
-
-      move = -1
-      score = -2
+      
+      new_board = nil
+      scores = []
       
       i = 0
-      
       while i < 9
         if board.cells[i] == " "
-          new_board.cells[i] = token
-          move_score = self.minimax(new_board, opponent)
-          if move_score > score
-            score = move_score
-            move = i
-          end
+          new_board = Board.new
+          new_board.cells = Marshal.load(Marshal.dump(board.cells))
+          new_board.cells[i] = opponent
           
+          scores << minimax(new_board, opponent)
         end
-        i += 1
+      i += 1
       end
       
-      return 0 if move == -1
-      return move
+      if opponent == @token
+        return scores.max
+      else
+        return scores.min
+      end
+      
     end
     
   end
+  
 end
