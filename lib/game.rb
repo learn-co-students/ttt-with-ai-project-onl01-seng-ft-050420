@@ -1,6 +1,6 @@
 class Game
   
-  attr_accessor :player_1, :player_2, :board
+  attr_accessor :player_1, :player_2, :board, :winner
 
   def initialize(player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new)
     @player_1 = player_1
@@ -26,26 +26,60 @@ class Game
     board.turn_count.even? ? player_1 : player_2
   end
 
-  def won?
-     WIN_COMBINATIONS.find do |combo|
-        if board.taken?(combo[0]) && board.cells[combo[0]] == board.cells[combo[1]] && board.cells[combo[1]] == board.cells[combo[2]]
-        return combo
-        end
-      end
-  end
+  # def won?
+  #   WIN_COMBINATIONS.find do |combo|
+  #       if board.taken?(combo[0]) && board.cells[combo[0]] == board.cells[combo[1]] && board.cells[combo[1]] == board.cells[combo[2]]
+  #       return combo
+  #       end
+  #     end
+  # end
 
+  def won?
+    WIN_COMBINATIONS.detect do |combo|
+      @board.cells[combo[0]] == @board.cells[combo[1]] &&
+      @board.cells[combo[1]] == @board.cells[combo[2]] &&
+      @board.taken?(combo[0]+1)
+    end
+  end
+  
   def draw?
-    board.full? && !self.won?
+    board.full? && !won?
   end
   
   def over?
-    self.draw? || self.won?
+    draw? || won?
   end
 
   def winner
-   board.cells[won?[0]]
+    if won? 
+      board.cells[won?[0]]
+    else
+      nil 
+    end
   end
-
+  # def winner
+  #   if winning_combo = won?
+  #     @winner = board.cells[winning_combo.first]
+  #   end
+  # end
+  def turn #makes valid moves, asks for input again after failed validation changes to player 2 
+      player = self.current_player 
+      move = player.move(board)
+      if board.valid_move?(move)
+        board.update(move, player)
+      else
+        turn
+      end
+  end
+  
+  def play
+    turn until over?
+    if won?
+      puts "Congratulations #{winner}!"
+    else 
+      puts "Cat's Game!"
+    end
+  end
 
 
 end
