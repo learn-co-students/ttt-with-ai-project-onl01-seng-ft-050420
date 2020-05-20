@@ -67,6 +67,7 @@ class Game
       move = player.move(board)
       if board.valid_move?(move)
         board.update(move, player)
+        board.display
       else
         turn
       end
@@ -78,6 +79,19 @@ class Game
       puts "Congratulations #{winner}!"
     else 
       puts "Cat's Game!"
+    end
+  end
+  
+  def self.start
+  puts "Welcome to Tic Tac Toe!"
+  puts "What kind of game would you like to play? (0, 1, or 2 players)"
+  input = gets.strip
+    if input == "0"
+      Game.new(player_1 = Players::Computer.new("X"), player_2 = Players::Computer.new("O"))
+    elsif input == "1"
+      Game.new(player_1 = Players::Human.new("X"), player_2 = Players::Computer.new("O"))
+    elsif input == "2"
+      Game.new
     end
   end
 
