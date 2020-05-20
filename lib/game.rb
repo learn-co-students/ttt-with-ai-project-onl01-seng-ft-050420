@@ -49,7 +49,6 @@ class Game
   end
   
   def turn
-    
     input = current_player.move(@board)
     
     while !@board.valid_move?(input)
@@ -57,6 +56,7 @@ class Game
     end
     
     @board.update(input, current_player)
+    puts
     @board.display
   end
   
@@ -81,6 +81,7 @@ board = Board.new
 board.cells = [" "," "," "," "," "," "," "," "," "]
 
 game = Game.new(player_1, player_2, board)
+board.display
 game.play
 
 

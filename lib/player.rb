@@ -4,12 +4,6 @@ class Player
   
   def initialize(token)
     @token = token
-    
-    if @token == "X"
-      @opponent = "O"
-    else 
-      @opponent = "X"
-    end
   end
   
 end
@@ -29,7 +23,7 @@ class Players
     def move(board)
       
       if board.cells.count {|x| x == " "} == 9
-        return "9"
+        return "2"
       end
       
       new_board = nil
@@ -61,7 +55,7 @@ class Players
       if board.won?
         if board.winner == @token
           return 1
-        elsif board.winner == @opponent
+        else
           return -1
         end
       elsif board.full?
