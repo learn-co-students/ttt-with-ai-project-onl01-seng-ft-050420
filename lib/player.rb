@@ -23,40 +23,21 @@ class Players
     def move(board)
 
       new_board = nil 
-      moves = [] 
-      scores = [] 
-      
-      i = 0
-      while i < 9
-      
-        if board.cells[i] == " "
+      moves = minimax(board, @token, true)    
 
-          new_board = Board.new
-          new_board.cells = Marshal.load(Marshal.dump(board.cells)) 
-          new_board.cells[i] = @token 
-          
-          moves << i
-          scores << minimax(new_board, @token) 
-        end  
-        
-        i += 1
-      end
-     
       max_moves = []
-      
-      i = 0
-      while i < moves.count
-        max_moves << moves[i] if scores[i] == scores.max
-      i += 1
+
+      moves.each do |key, value|
+        max_moves << key if value == moves.values.max
       end
       
       move = max_moves.shuffle[0]
       
       return (move + 1).to_s
-      
+
     end
     
-    def minimax(board, token)
+    def minimax(board, token, first_call)
 
       if board.won?
         if board.winner == @token
@@ -68,15 +49,17 @@ class Players
         return 0
       end
 
-      if token == "X"
+      if first_call
+        next_player = token
+      elsif token == "X"
         next_player = "O"
       else 
         next_player = "X"
       end
-      
+
       new_board = nil
-      scores = []
-      
+      moves = {}
+
       i = 0
       while i < 9
         if board.cells[i] == " "
@@ -84,19 +67,23 @@ class Players
           new_board.cells = Marshal.load(Marshal.dump(board.cells))
           new_board.cells[i] = next_player
           
-          scores << minimax(new_board, next_player)
+          moves[i] = minimax(new_board, next_player, false) 
         end
       i += 1
       end   
       
-      if next_player == @token
-        return scores.max
-      else
-        return scores.min
+      if first_call 
+        return moves
       end
-      
+
+      if next_player == @token
+        return moves.values.max
+      else
+        return moves.values.min
+      end
+    
     end
     
   end
-  
+
 end
