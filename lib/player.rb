@@ -22,9 +22,7 @@ class Players
     
     def move(board)
 
-      new_board = nil 
       moves = minimax(board, @token, true)    
-
       max_moves = []
 
       moves.each do |key, value|
