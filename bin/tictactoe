@@ -6,7 +6,7 @@ puts "Welcome to the Tic Tac Toe game!"
 puts "How many players? (0, 1, or 2):"
 game_input = gets.chomp
 
-puts "Who should go first and be X? (0, 1, or 2):"
+puts "Who should go first and be X? (1 or 2):"
 player_input = gets.chomp
 
 case game_input
