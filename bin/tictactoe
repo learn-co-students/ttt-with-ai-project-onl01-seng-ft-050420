@@ -1,3 +1,19 @@
 #!/usr/bin/env ruby
 
 require_relative '../config/environment'
+
+
+game = Game.start
+
+puts "Who would like to go first (You'll be 'X')"
+game.play 
+
+if game.over?
+  puts "Would you like to play again? If yes, type 'yes'. If no, type 'exit'."
+  input = gets.strip
+  if input == "yes"
+    new_game = Game.start
+  else
+    puts 'exiting!'
+  end
+end
